@@ -13,6 +13,7 @@ from ontology.common.address import Address
 import re
 import json
 from aiohttp import web
+import logging
 
 
 async def get_ddo(ont_id):
@@ -98,7 +99,7 @@ def make_did_document(ddo):
         context='https://w3id.org/did/v1',
         id=ddo['id'],
         authentication=[],
-        publicKeys=[],
+        publicKey=[],
     )
     for k in ddo['keys']:
         doc['publicKey'].append(dict(
@@ -110,7 +111,6 @@ def make_did_document(ddo):
         doc['authentication'].append(k['PubKeyId'])
     if ddo['ctrl']:
         doc['controller'] = ddo['ctrl']
-
     if ddo['recovery']:
         doc['recovery'] = ddo['recovery']
 
@@ -126,6 +126,7 @@ async def handle(request):
     if ddo:
         res = make_did_document(ddo)
     else:
+        logging.info("cannot resolves %s", id)
         res = None
     return web.Response(text=res)
 
@@ -139,4 +140,6 @@ def run():
 
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.INFO)
+    logging.info("Start ontid driver")
     run()
