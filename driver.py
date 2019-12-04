@@ -109,10 +109,25 @@ def make_did_document(ddo):
             publicKeyHex=k['Value'],
         ))
         doc['authentication'].append(k['PubKeyId'])
-    if ddo['ctrl']:
+    if 'ctrl' in ddo:
         doc['controller'] = ddo['ctrl']
-    if ddo['recovery']:
+    if 'recovery' in ddo:
         doc['recovery'] = ddo['recovery']
+    for a in ddo['attributes']:
+        if a['Type'] == 'service':
+            srvc = a['Value']
+            srvc['id'] = ddo['id'] + '#' + a['Key']
+            if 'service' not in doc:
+                doc['service'] = []
+            doc['service'].append(srvc)
+        else:
+            if 'attribute' not in doc:
+                doc['attribute'] = []
+                doc['attribute'].append(dict(
+                    id=ddo['id'] + '#' + a['Key'],
+                    type=a['Type'],
+                    value=a['Value'],
+                ))
 
     return json.dumps(doc, indent=2)
 
