@@ -95,12 +95,12 @@ def get_key_type(key):
 
 
 def make_did_document(ddo):
-    doc = dict(
-        context='https://w3id.org/did/v1',
-        id=ddo['id'],
-        authentication=[],
-        publicKey=[],
-    )
+    doc = {
+        '@context': 'https://w3id.org/did/v1',
+        'id': ddo['id'],
+        'authentication': [],
+        'publicKey': [],
+    }
     for k in ddo['keys']:
         doc['publicKey'].append(dict(
             id=k['PubKeyId'],
@@ -134,7 +134,7 @@ async def handle(request):
 def run():
     app = web.Application()
     app.add_routes([
-        web.get('/{id}', handle)
+        web.get('/1.0/identifiers/{id}', handle)
     ])
     web.run_app(app)
 
