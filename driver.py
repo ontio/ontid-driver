@@ -16,6 +16,9 @@ from aiohttp import web
 import logging
 
 
+__version__ = "0.1.0"
+
+
 async def get_ddo(ont_id):
     contract_address = b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00' \
                        b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x03'
