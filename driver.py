@@ -38,7 +38,9 @@ async def handle(request):
     else:
         logging.info("cannot resolves %s", id)
         res = None
-    return web.Response(text=res)
+    # fix issue #1
+    headers = {'Content-Type': 'application/did+ld+json'}
+    return web.Response(text=res, headers=headers)
 
 
 def run():
